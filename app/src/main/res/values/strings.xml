@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">App</string>
+    <string name="hora">Hora:</string>
+    <string name="pesquisar">Pesquisar</string>
+    <string name="sala_v0_03">Sala V0.03</string>
+    <string name="desctico">desctico</string>
+    <string name="dispon_vel_por_mais_5h">Disponível por mais 5h</string>
+    <string name="hor_rio_da_sala_v0_03">Horário da Sala V0.03</string>
+    <string name="hor_rio_da_sala_v0_03_">Horário da Sala v0.03:</string>
+    <string name="hor_rio_da_sala_v0_03__">Horário da sala V0.03:</string>
+    <string name="disp">Dísponivel por mais uma hora</string>
+    <string name="escolher_hora">Escolher Hora</string>
+    <string name="hora___">Hora</string>
+    <string name="mudar_a_hora">Mudar a Hora</string>
+    <string name="hora_atual">Hora: Atual</string>
+</resources>
