@@ -197,6 +197,7 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
          */
         public String obterDisponibilidadeString(int hora, int minuto) {
 //comentario de teste
+//Comentario do miguel :D
             String minuto_novo = formato_hora(minuto);
             String hora_nova = formato_hora(hora);
             return "Disponivel por "+hora_nova+":"+minuto_novo+" horas";
