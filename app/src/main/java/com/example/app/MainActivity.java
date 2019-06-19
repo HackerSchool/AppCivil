@@ -2,6 +2,8 @@ package com.example.app;
 
 import android.app.TimePickerDialog;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,10 +13,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
-
 import java.util.ArrayList;
 import java.util.Calendar;
+import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity  implements TimePickerDialog.OnTimeSetListener {
 
@@ -25,6 +26,10 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
     private ArrayList<String> mNames = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
     private ArrayList<String> mHoras = new ArrayList<>();
+    private DrawerLayout drawerLayout;
+    private ListView listView;
+    private String[] navdrawer;
+    private ActionBarDrawerToggle drawerListener;
 
 
 
@@ -197,6 +202,10 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
             return "Disponivel por "+hora_nova+":"+minuto_novo+" horas";
         }
 
+        /**
+         *
+         * @param freeTimes
+         */
         public void setFreeTimes(ArrayList<int[]> freeTimes) {
             this.freeTimes = freeTimes;
         }
@@ -211,3 +220,4 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
         }
     }
 }
+
