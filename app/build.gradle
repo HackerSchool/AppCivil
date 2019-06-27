@@ -31,4 +31,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'android.arch.navigation:navigation-fragment:1.0.0'
+    implementation 'com.android.volley:volley:1.1.1'
 }

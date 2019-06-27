@@ -15,31 +15,50 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+
 import android.widget.ListView;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity  implements TimePickerDialog.OnTimeSetListener {
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 
+
+public class MainActivity extends AppCompatActivity  implements TimePickerDialog.OnTimeSetListener {
     private static final String TAG = "MainActivity";
 
     //Variáveis
-
-    private ArrayList<String> mNames = new ArrayList<>();
-    private ArrayList<String> mImageUrls = new ArrayList<>();
-    private ArrayList<String> mHoras = new ArrayList<>();
     private DrawerLayout drawerLayout;
     private ListView listView;
     private String[] navdrawer;
     private ActionBarDrawerToggle drawerListener;
 
+    RequestQueue volleyQueue;
+
+    RecyclerView recyclerView;
+    RecyclerViewAdaptador recyclerViewAdapter;
 
 
-
+    TextView hora_atual;
+    Button button;
+    Button botao_hora_atual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        hora_atual = findViewById(R.id.hora_escolhida);
+        button = findViewById(R.id.button);
+        botao_hora_atual = findViewById(R.id.botao_hora);
+
+
+        //Inicializa a lista de salas se ainda não tiver sido
+        if(Salas.salas == null) {
+            Salas.initSalas();
+        }
+
+        volleyQueue = Volley.newRequestQueue(this);
 
         Calendar rightNow = Calendar.getInstance();
         int hora_obtida = rightNow.get(Calendar.HOUR_OF_DAY); //Hora atual inicial (quando a app é aberta
@@ -48,15 +67,9 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
         String minuto_atual_inicial = formato_hora(minuto_obtido);
         String hora_atual_inicial = formato_hora(hora_obtida);
 
-        TextView hora_atual = findViewById(R.id.hora_escolhida);
         hora_atual.setText("Hora: " +hora_atual_inicial+":"+minuto_atual_inicial);
 
         Log.d(TAG, "onCreate: Started");
-        initImageBitmaps();
-
-        final Button button = findViewById(R.id.button);
-
-        Button botao_hora_atual = findViewById(R.id.botao_hora);
 
         botao_hora_atual.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +84,7 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
                 TextView hora_atual = findViewById(R.id.hora_escolhida);
                 hora_atual.setText("Hora: " +hora_atual_nova+":"+minuto_atual_novo);
 
+                horaAlterada(hora_obtida, minuto_obtido);
             }
         });
 
@@ -82,15 +96,42 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
             }
         });
 
+        initRecyclerView();
+        horaAlterada(hora_obtida, minuto_obtido);
     }
 
+    /**
+     * Quando se escolhe uma hora na coisinha para escolher
+     * @param view
+     * @param hourOfDay
+     * @param minute
+     */
     @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+    public void onTimeSet(TimePicker view, final int hourOfDay, final int minute) {
         TextView hora_escolhida = findViewById(R.id.hora_escolhida); //Hora escolhida no Dialog
         String hora_nova = formato_hora(hourOfDay);
         String minuto_novo = formato_hora(minute);
         hora_escolhida.setText("Hora: " + hora_nova + ":"+ minuto_novo);
 
+        horaAlterada(hourOfDay, minute);
+    }
+
+
+    /**
+     * É chamada quando se altera a hora. Atualiza a lista
+     */
+    private void horaAlterada(final int hora, final int minuto) {
+        Salas.resetRequestsObterEstado(volleyQueue);
+
+        Salas.getSalasState(new Date(), hora, minuto, volleyQueue, new Salas.ObterSalasTerminouCallback() {
+            @Override
+            public void concluido() {
+                //Atualiza a lista
+                recyclerViewAdapter.updateSalasToShow(hora, minuto);
+            }
+        });
+
+        recyclerViewAdapter.clear();
     }
 
     /**
@@ -112,10 +153,8 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
         }
     }
 
-
-
     private void initImageBitmaps(){
-        Log.d(TAG, "initImageBitmaps: a preparar as imagens");
+        /*Log.d(TAG, "initImageBitmaps: a preparar as imagens");
 
         mImageUrls.add("http://www.civil.ist.utl.pt/~arq/images/salanormal1.jpg");
         mNames.add("Sala V0.01");
@@ -152,74 +191,15 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
         mImageUrls.add("http://www.civil.ist.utl.pt/~arq/images/salanormal1.jpg");
         mNames.add("Sala V1.14");
         mHoras.add("2");
-
-        initRecyclerView();
-
-
+*/
     }
 
     private void initRecyclerView(){
         Log.d(TAG, "initRecyclerView: A iniciar a Recycler View");
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        RecyclerViewAdaptador adaptador = new RecyclerViewAdaptador(this, mNames, mImageUrls, mHoras);
-        recyclerView.setAdapter(adaptador);
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerViewAdapter = new RecyclerViewAdaptador(this);
+        recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
-
-    }
-
-    public final class Sala {
-        String id, nome;
-        String urlFoto;
-
-        ArrayList<String> eventos;
-        ArrayList<int[]> freeTimes;
-
-        //Indica se foi lida com sucesso
-        boolean lidaComSucesso;
-        //Indica o erro que ocorreu ao ler a sala
-        String erroALer;
-
-        public Sala(String id, String nome) {
-            this.id = id;
-            this.nome = nome;
-            this.freeTimes = freeTimes;
-
-            lidaComSucesso = true;
-        }
-
-        /**
-         * Esta função devolve o texto a ser apresentado a dizer durante quanto tempo a sala vai estar livre ou
-         *  a partir de quando
-         * @param hora a hora escolhida
-         * @param minuto o minuto escolhido
-         * @return O texto a ser apresentado
-         */
-        public String obterDisponibilidadeString(int hora, int minuto) {
-//comentario de teste
-//Comentario do miguel :D
-            String minuto_novo = formato_hora(minuto);
-            String hora_nova = formato_hora(hora);
-            return "Disponivel por "+hora_nova+":"+minuto_novo+" horas";
-        }
-
-        /**
-         *
-         * @param freeTimes
-         */
-        public void setFreeTimes(ArrayList<int[]> freeTimes) {
-            this.freeTimes = freeTimes;
-        }
-
-        /**
-         * Marca que houve um erro a ler os dados desta sala
-         * @param ex Erro
-         */
-        public void setError(Exception ex) {
-            lidaComSucesso = false;
-            erroALer = ex.getMessage();
-        }
     }
 }
 
