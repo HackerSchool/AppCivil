@@ -17,7 +17,13 @@ import org.json.JSONArray;
 
 public class Salas
 {
-    interface ObterSalasTerminouCallback {
+	public static void updateSalaStatesForHour(int hora, int minuto) {
+		for(Sala sala : salasList) {
+			sala.updateEstadoAtual(hora, minuto);
+		}
+	}
+
+	interface ObterSalasTerminouCallback {
         void concluido();
     }
 
@@ -72,28 +78,14 @@ public class Salas
         });
     }
 	/**
-	 * Obtem o estado de todas as salas (Horas livres)
-	 * @param day
-	 * @param volleyQueue
+	 * Obtem o as horas livres da sala para esse dia
 	 */
-	public static void getSalasState(Date day, int hora, int minuto, RequestQueue volleyQueue, ObterSalasTerminouCallback callback) {
+	public static void getSalaData(Date day, RequestQueue volleyQueue, ObterSalasTerminouCallback callback) {
 	    //String da data para fazer o request sobre os eventos nessa data
 	    String dayStr = dateFormat.format(day);
 
 		//Para cada sala faz um request e processa-o
 		for(Sala sala : salas.values()) {
-			/*try {
-				JSONObject salaResponse = getSala(sala.id, dayStr, volleyQueue);
-				if(salaResponse != null) {
-					processSala(sala, salaResponse, dayStr);
-					System.out.println(sala.obterDisponibilidadeString(hora, minuto));
-					Log.d("a", sala.obterDisponibilidadeString(hora, minuto));
-				}
-			} catch(Exception e) {
-			    //Erro numa sala
-                Log.e("Erro", "Erro", e);
-				sala.setError(e);
-			}*/
             try {
                 obterSala(sala, dayStr, volleyQueue, callback);
             } catch (Exception e) {
@@ -102,6 +94,8 @@ public class Salas
             }
         }
 	}
+
+
 
 	private static void obterSala(final Sala sala, final String day, RequestQueue volleyQueue, final ObterSalasTerminouCallback callback) throws Exception {
         String url = String.format("https://fenix.tecnico.ulisboa.pt/api/fenix/v1/spaces/%s?day=%s", sala.id, day);

@@ -1,4 +1,6 @@
 package com.example.app;
+import android.util.Pair;
+
 import java.util.ArrayList;
 
 public final class Sala {
@@ -15,6 +17,11 @@ public final class Sala {
     boolean lidaComSucesso;
     //Indica o erro que ocorreu ao ler a sala
     String erroALer;
+
+    EstadoSala estado;
+    int numMinutosLivre;
+    int numMinutosAteEstarLivre;
+
 
     public Sala(String id, String nome) {
         this.id = id;
@@ -45,22 +52,88 @@ public final class Sala {
                     //Se a hora atual é antes do final deste intervalo
                     //!!Está a meio de um tempo livre!!
                     int numMinutosLivre = Util.calcuclarDuracaoIntervaloEmMinutos(hora, minuto, intervalo[2], intervalo[3]);
-                    return String.format("Disponivel por mais %d minutos", numMinutosLivre);
+
+                    return String.format("Disponivel por mais %s", formatMinutesToDisplay(numMinutosLivre));
                 }
             }
 
             //Nào está a meio deste tempo livre
-
-
-
             if(intervalo[0] > hora || (intervalo[0] == hora && intervalo[1] > minuto)) {
                 //Se o intervalo livre já começa depois da hora atual
                 int numMinutosAteEstarLivre = Util.calcuclarDuracaoIntervaloEmMinutos(hora, minuto, intervalo[0], intervalo[1]);
                 int numMinutosLivre = Util.calcuclarDuracaoIntervaloEmMinutos(intervalo);
-                return String.format("Disponivél daqui a %d minutos por %d minutos", numMinutosAteEstarLivre, numMinutosLivre);
+
+                return String.format("Disponivel daqui a %s por %s",
+                        formatMinutesToDisplay(numMinutosAteEstarLivre),
+                        formatMinutesToDisplay(numMinutosLivre));
             }
         }
         return "??";
+    }
+
+    /**
+     *
+     * @param hora
+     * @param minuto
+     * @return Devolve um objeto cujo primeiro elemento é um EstadoSala. O segundo é o numero de minutos livre. O terciro é o numero de minutos ate estar livre
+     */
+    public void updateEstadoAtual(int hora, int minuto) {
+        for(int i = 0; i<freeTimes.size(); i++) {
+            int[] intervalo = freeTimes.get(i);
+            if(hora > intervalo[0] || (hora == intervalo[0] && minuto >= intervalo[1])) {
+                //Se a hora atual é depois do inicio deste intervalo
+                if(hora < intervalo[2] || (hora == intervalo[2] && minuto <= intervalo[3])) {
+                    //Se a hora atual é antes do final deste intervalo
+                    //!!Está a meio de um tempo livre!!
+                    int numMinutosLivre = Util.calcuclarDuracaoIntervaloEmMinutos(hora, minuto, intervalo[2], intervalo[3]);
+
+                    estado = EstadoSala.DisponivelAgora;
+                    this.numMinutosLivre = numMinutosLivre;
+                    this.numMinutosAteEstarLivre = 0;
+                }
+            }
+
+            //Nào está a meio deste tempo livre
+            if(intervalo[0] > hora || (intervalo[0] == hora && intervalo[1] > minuto)) {
+                //Se o intervalo livre já começa depois da hora atual
+                int numMinutosAteEstarLivre = Util.calcuclarDuracaoIntervaloEmMinutos(hora, minuto, intervalo[0], intervalo[1]);
+                int numMinutosLivre = Util.calcuclarDuracaoIntervaloEmMinutos(intervalo);
+
+                estado = EstadoSala.DisponivelMaisTarde;
+                this.numMinutosLivre = numMinutosLivre;
+                this.numMinutosAteEstarLivre = numMinutosAteEstarLivre;
+            }
+        }
+    }
+
+    /**
+     * Mostra como x horas e y minutos
+     * @param minutesTotal minutos totais
+     * @return texto a mostrar
+     */
+    private String formatMinutesToDisplay(int minutesTotal) {
+        if(minutesTotal == 1)
+            return "1 minuto";
+        if(minutesTotal < 60)
+            return String.format("%d minutos", minutesTotal);
+
+        String message = null;
+        int minutes = minutesTotal % 60;
+        int hours = minutesTotal / 60;
+
+        if (hours == 1)
+            message = "1 hora";
+        else
+            message = String.format("%d horas", hours);
+
+        if(minutes != 0)
+            //Se não forem horas certas
+            if(minutes == 1)
+                message += " e 1 minuto";
+            else
+                message += String.format(" e %d minutos", minutes);
+
+        return message;
     }
 
 

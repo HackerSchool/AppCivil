@@ -1,6 +1,8 @@
 package com.example.app;
 
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,14 +13,13 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import android.widget.ListView;
-import android.widget.Button;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
     RecyclerView recyclerView;
     RecyclerViewAdaptador recyclerViewAdapter;
 
-
+    ProgressBar progressBar;
     TextView hora_atual;
     Button button;
     Button botao_hora_atual;
@@ -51,7 +52,8 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
         hora_atual = findViewById(R.id.hora_escolhida);
         button = findViewById(R.id.button);
         botao_hora_atual = findViewById(R.id.botao_hora);
-
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
 
         //Inicializa a lista de salas se ainda não tiver sido
         if(Salas.salas == null) {
@@ -116,6 +118,13 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
         horaAlterada(hourOfDay, minute);
     }
 
+    /**
+     * Faz aparecer ou desaparecer a progressbar
+     * @param loading
+     */
+    private void setLoading(boolean loading) {
+        progressBar.setVisibility(loading ? View.VISIBLE : View.INVISIBLE);
+    }
 
     /**
      * É chamada quando se altera a hora. Atualiza a lista
@@ -123,15 +132,18 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
     private void horaAlterada(final int hora, final int minuto) {
         Salas.resetRequestsObterEstado(volleyQueue);
 
-        Salas.getSalasState(new Date(), hora, minuto, volleyQueue, new Salas.ObterSalasTerminouCallback() {
+        Salas.getSalaData(new Date(), volleyQueue, new Salas.ObterSalasTerminouCallback() {
             @Override
             public void concluido() {
+                Salas.updateSalaStatesForHour(hora, minuto);
                 //Atualiza a lista
                 recyclerViewAdapter.updateSalasToShow(hora, minuto);
+                setLoading(false);
             }
         });
 
         recyclerViewAdapter.clear();
+        setLoading(true);
     }
 
     /**
@@ -198,6 +210,16 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
         Log.d(TAG, "initRecyclerView: A iniciar a Recycler View");
         recyclerView = findViewById(R.id.recycler_view);
         recyclerViewAdapter = new RecyclerViewAdaptador(this);
+        recyclerViewAdapter.clickSalaCallback = new RecyclerViewAdaptador.ClickSalaCallback() {
+            @Override
+            public void onClick(Sala sala) {
+                String url = String.format("https://fenix.tecnico.ulisboa.pt/spaces-view/schedule/%s", sala.id);
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        };
+
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
