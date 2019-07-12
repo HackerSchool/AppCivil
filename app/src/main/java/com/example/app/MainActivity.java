@@ -19,8 +19,6 @@ import android.widget.TimePicker;
 import java.util.Calendar;
 import java.util.Date;
 
-import android.widget.ListView;
-
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
@@ -29,10 +27,6 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
     private static final String TAG = "MainActivity";
 
     //Variáveis
-    private DrawerLayout drawerLayout;
-    private ListView listView;
-    private String[] navdrawer;
-    private ActionBarDrawerToggle drawerListener;
 
     RequestQueue volleyQueue;
 
@@ -43,7 +37,6 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
     TextView hora_atual;
     Button button;
     Button botao_hora_atual;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

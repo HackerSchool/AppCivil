@@ -7,27 +7,24 @@ import android.support.annotation.NonNull;
 import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
+import android.widget.Toast;
+import android.widget.Button;
+import android.graphics.drawable.Drawable.ConstantState;
+import android.os.Build;
+import android.content.res.Resources;
+
 
 public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdaptador.ViewHolder>{
     private static final String TAG = "RecyclerViewAdaptador";
@@ -38,6 +35,7 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
     private List<String> stringsDisponibilidades; //Texto a apresentar com as disponibilidades
 
     ClickSalaCallback clickSalaCallback;
+
 
     public RecyclerViewAdaptador(Context Context) {
         this.mContext = Context;
@@ -53,6 +51,9 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
         Collections.sort(salas, new Comparator<Sala>() {
             @Override
             public int compare(Sala s1, Sala s2) {
+                if(s1.favorita)
+                    return 1;
+
                 if(s1.numMinutosLivre < 15 && s2.numMinutosLivre < 15)
                     return 0;
 
@@ -110,22 +111,30 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
                 .load(sala.urlFoto) //Dar load ao url
                 .into(holder.image); //Dar load no holder
 
+
+        Glide.with(mContext)
+                .load(R.drawable.botao_estados)
+                .into(holder.heart);
+
         holder.imageName.setText(sala.nome);//Definir o Nome que aparece ao lado da imagem
 
         holder.hora.setText(stringsDisponibilidades.get(position));//Definir o que vai aparecer por baixo do nome ^^
 
-
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+        holder.heart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { //Definir o que acontece quando se carrega no Holder
                 Log.d(TAG, "onClick: click on: " + sala.nome);
-                //Toast.makeText(mContext, "Mostrar Horário da "+ sala.nome, Toast.LENGTH_SHORT).show();
-                //Eventualmente Abrir outra Activity ?
-                clickSalaCallback.onClick(sala);
+                MudarImagem(v, mContext);
+                Toast.makeText(mContext, "Mostrar Horário da "+ sala.nome, Toast.LENGTH_SHORT).show();
             }
 
 
         });
+
+
+
+
+
     }
 
 
@@ -150,17 +159,37 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
         RelativeLayout parentLayout;
         TextView imageName;
         TextView hora;
+        CircleImageView heart;
+        Button botao;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
             imageName = itemView.findViewById(R.id.image_name);
             hora = itemView.findViewById(R.id.hora);
+            heart = itemView.findViewById(R.id.heart);
             parentLayout = itemView.findViewById(R.id.parent_layout);
+            botao = itemView.findViewById(R.id.botao_link);
         }
     }
 
     public interface ClickSalaCallback {
         void onClick(Sala sala);
+    }
+
+    public void MudarImagem(@NonNull View itemView, Context ctx){
+        CircleImageView imageView = itemView.findViewById(R.id.heart);
+        //if coracao prenchido -> tirar estado de favorito e pôr coracao não preenchido
+        //if coracao nao preenchido -> por estado favorito e pôr coracao preenchido
+        if (imageView.getDrawable().getConstantState() == ctx.getResources().getDrawable(R.drawable.ic_favorite_black_24dp).getConstantState())
+        {
+            imageView.setImageResource(R.drawable.ic_heart);
+            // sala.favorita = false;
+        }
+        else
+        {
+            imageView.setImageResource(R.drawable.ic_favorite_black_24dp);
+            // sala.favorita = true;
+        }
     }
 }

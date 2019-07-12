@@ -8,6 +8,11 @@
     android:padding="15dp"
     android:visibility="visible">
 
+    <Button
+        android:id="@+id/botao_link"
+        android:layout_width="298dp"
+        android:layout_height="80dp"
+        android:background="@android:color/transparent"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image"
@@ -18,7 +23,7 @@
 
     <TextView
         android:id="@+id/image_name"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="31dp"
@@ -30,7 +35,7 @@
 
     <TextView
         android:id="@+id/hora"
-        android:layout_width="wrap_content"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="31dp"
@@ -39,6 +44,16 @@
         android:text="@string/dispon_vel_por_mais_5h"
         android:textColor="#000"
         android:textSize="17sp" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/heart"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="300dp"
+        android:layout_marginTop="25dp"
+        android:src="@mipmap/ic_launcher" />
+
+
 
 
 </RelativeLayout>

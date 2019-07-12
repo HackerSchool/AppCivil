@@ -42,20 +42,20 @@ public class Salas
 		salas = new HashMap<>();
 		salasList = new ArrayList<>();
 
-        addSala(new Sala("2448131361736", "V1.06", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330853"));
-        addSala(new Sala("2448131361735", "V1.07", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330860"));
-        addSala(new Sala("2448131361734", "V1.08", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/1415397882462609"));
-        addSala(new Sala("2448131361733", "V1.09", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/1415397882462614"));
+        addSala(new Sala("2448131361736", "V1.06", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330853", false));
+        addSala(new Sala("2448131361735", "V1.07", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330860", false));
+        addSala(new Sala("2448131361734", "V1.08", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/1415397882462609", false));
+        addSala(new Sala("2448131361733", "V1.09", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/1415397882462614", false));
 
-        addSala(new Sala("2448131361682", "V1.26", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330968"));
-        addSala(new Sala("2448131361681", "V1.25", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330966"));
-        addSala(new Sala("2448131361680", "V1.24", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330962"));
-        addSala(new Sala("2448131361679", "V1.23", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330955"));
+        addSala(new Sala("2448131361682", "V1.26", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330968", false));
+        addSala(new Sala("2448131361681", "V1.25", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330966", false));
+        addSala(new Sala("2448131361680", "V1.24", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330962", false));
+        addSala(new Sala("2448131361679", "V1.23", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330955", false));
 
-        addSala(new Sala("2448131361683", "V1.31"));
-        addSala(new Sala("2448131361685", "V1.32"));
-        addSala(new Sala("2448131361687", "V1.33"));
-        addSala(new Sala("2448131361689", "V1.34"));
+        addSala(new Sala("2448131361683", "V1.31", false));
+        addSala(new Sala("2448131361685", "V1.32", false));
+        addSala(new Sala("2448131361687", "V1.33", false));
+        addSala(new Sala("2448131361689", "V1.34", false));
 	}
 
 	/**

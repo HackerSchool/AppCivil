@@ -2,12 +2,13 @@ package com.example.app;
 import android.util.Pair;
 
 import java.util.ArrayList;
+import android.widget.ImageView;
+import android.graphics.Bitmap;
 
 public final class Sala {
     private static final String FOTO_DEFAULT = "http://www.civil.ist.utl.pt/~arq/images/salanormal1.jpg";
     String id, nome;
     String urlFoto;
-
     ArrayList<SalaEvento> eventos;
 
     //Comtem intervalos enquanto vai estar livre
@@ -21,19 +22,23 @@ public final class Sala {
     EstadoSala estado;
     int numMinutosLivre;
     int numMinutosAteEstarLivre;
+    Boolean favorita;
 
 
-    public Sala(String id, String nome) {
+    public Sala(String id, String nome, boolean favorita) {
         this.id = id;
         this.nome = nome;
         urlFoto = FOTO_DEFAULT;
+        this.favorita = favorita;
 
         lidaComSucesso = true;
     }
 
-    public Sala(String id, String nome, String urlFoto) {
-        this(id, nome);
+    public Sala(String id, String nome, String urlFoto, boolean favorita) {
+        this.id = id;
+        this.nome = nome;
         this.urlFoto = urlFoto;
+        this.favorita = favorita;
     }
 
     /**
@@ -53,7 +58,7 @@ public final class Sala {
                     //!!Está a meio de um tempo livre!!
                     int numMinutosLivre = Util.calcuclarDuracaoIntervaloEmMinutos(hora, minuto, intervalo[2], intervalo[3]);
 
-                    return String.format("Disponivel por mais %s", formatMinutesToDisplay(numMinutosLivre));
+                    return String.format("Disponível por mais %s.", formatMinutesToDisplay(numMinutosLivre));
                 }
             }
 
@@ -63,7 +68,7 @@ public final class Sala {
                 int numMinutosAteEstarLivre = Util.calcuclarDuracaoIntervaloEmMinutos(hora, minuto, intervalo[0], intervalo[1]);
                 int numMinutosLivre = Util.calcuclarDuracaoIntervaloEmMinutos(intervalo);
 
-                return String.format("Disponivel daqui a %s por %s",
+                return String.format("Disponível daqui a %s por %s.",
                         formatMinutesToDisplay(numMinutosAteEstarLivre),
                         formatMinutesToDisplay(numMinutosLivre));
             }

@@ -21,4 +21,6 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="hora_atual_">Hora Atual</string>
+    <string name="title_activity__drawer">Activity_Drawer</string>
+    <string name="title_activity_navigation__drawer">Navigation_Drawer</string>
 </resources>
