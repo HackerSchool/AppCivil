@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
                 TextView hora_atual = findViewById(R.id.hora_escolhida);
                 hora_atual.setText("Hora: " +hora_atual_nova+":"+minuto_atual_novo);
 
+                initRecyclerView();
+
                 horaAlterada(hora_obtida, minuto_obtido);
             }
         });
@@ -156,47 +158,6 @@ public class MainActivity extends AppCompatActivity  implements TimePickerDialog
                 return String.valueOf(num_inteiro);
             }
         }
-    }
-
-    private void initImageBitmaps(){
-        /*Log.d(TAG, "initImageBitmaps: a preparar as imagens");
-
-        mImageUrls.add("http://www.civil.ist.utl.pt/~arq/images/salanormal1.jpg");
-        mNames.add("Sala V0.01");
-        mHoras.add("3");
-
-        mImageUrls.add("http://chemulisboa.weebly.com/uploads/2/6/1/8/26189991/7524493.jpg?1401722318");
-        mNames.add("Sala V0.02");
-        mHoras.add("2");
-
-        mImageUrls.add("http://www.civil.ist.utl.pt/~arq/images/salanormal1.jpg");
-        mNames.add("Sala V0.03");
-        mHoras.add("1");
-
-        mImageUrls.add("http://www.civil.ist.utl.pt/~arq/images/salanormal1.jpg");
-        mNames.add("Sala V0.07");
-        mHoras.add("2");
-
-        mImageUrls.add("http://www.civil.ist.utl.pt/~arq/images/salanormal1.jpg");
-        mNames.add("Sala V0.14");
-        mHoras.add("3");
-
-        mImageUrls.add("http://www.civil.ist.utl.pt/~arq/images/salanormal1.jpg");
-        mNames.add("Sala V1.20");
-        mHoras.add("5");
-
-        mImageUrls.add("http://www.civil.ist.utl.pt/~arq/images/salanormal1.jpg");
-        mNames.add("Sala V1.18");
-        mHoras.add("3");
-
-        mImageUrls.add("http://www.civil.ist.utl.pt/~arq/images/salanormal1.jpg");
-        mNames.add("Sala V1.01");
-        mHoras.add("4");
-
-        mImageUrls.add("http://www.civil.ist.utl.pt/~arq/images/salanormal1.jpg");
-        mNames.add("Sala V1.14");
-        mHoras.add("2");
-*/
     }
 
     private void initRecyclerView(){

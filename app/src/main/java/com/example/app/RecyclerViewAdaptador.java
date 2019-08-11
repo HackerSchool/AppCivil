@@ -17,6 +17,8 @@ import java.util.Comparator;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import android.widget.Button;
+import  java.io.File;
+import  android.net.Uri;
 
 
 public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdaptador.ViewHolder>{
@@ -26,7 +28,7 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
 
     private List<Sala> salas; //Lista de salas a mostrar
     private List<String> stringsDisponibilidades; //Texto a apresentar com as disponibilidades
-    private List<String> stringsIds;
+    private List<String> stringsIds; //Ids de cada sala, para serem identificadas
 
     ClickSalaCallback clickSalaCallback;
 
@@ -48,42 +50,39 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
             public int compare(Sala s1, Sala s2) {
                 SharedPreferences sharedPreferences = mContext.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
                 String value1 = sharedPreferences.getString(s1.id, "nfav");
-                String value2 = sharedPreferences.getString(s1.id, "nfav");
-                Log.i("hi", value1+" "+value2);
+                String value2 = sharedPreferences.getString(s2.id, "nfav");
 
-                if(value1.equals("fav"))
+                if(value1.equals("fav")) {
                     return -1;
-
-                if(value2.equals("fav"))
+                }
+                if(value2.equals("fav")) {
                     return 1;
+                }
 
-                if(value2.equals(value1))
-                     return 0;
-
-                if(s1.numMinutosLivre < 15 && s2.numMinutosLivre < 15)
-                    return 0;
+                if(s1.numMinutosLivre < 15 && s2.numMinutosLivre < 15){
+                    return 0;}
 
                 if(s1.estado == EstadoSala.DisponivelAgora && s2.estado == EstadoSala.DisponivelMaisTarde) {
-                    if(s1.numMinutosLivre < 15)
-                        return -1;
+                    if(s1.numMinutosLivre < 15){
+                        return -1;}
                     return 1;
-                } else if(s1.estado == EstadoSala.DisponivelMaisTarde && s2.estado == EstadoSala.DisponivelAgora) {
-                    if(s2.numMinutosLivre < 15)
-                        return 1;
+                } else
+                    if(s1.estado == EstadoSala.DisponivelMaisTarde && s2.estado == EstadoSala.DisponivelAgora) {
+                    if(s2.numMinutosLivre < 15){
+                        return 1;}
                     return -1;
                 }
 
-                if(s1.estado == EstadoSala.DisponivelAgora && s2.estado == EstadoSala.DisponivelAgora)
-                    return s1.numMinutosLivre > s2.numMinutosLivre  ? 1 : -1;
+                if(s1.estado == EstadoSala.DisponivelAgora && s2.estado == EstadoSala.DisponivelAgora){
+                    return s1.numMinutosLivre > s2.numMinutosLivre  ? 1 : -1;}
 
-                if(s1.estado == EstadoSala.DisponivelMaisTarde && s2.estado == EstadoSala.DisponivelMaisTarde)
-                    return s1.numMinutosAteEstarLivre > s2.numMinutosAteEstarLivre ? 1 : -1;
-
+                if(s1.estado == EstadoSala.DisponivelMaisTarde && s2.estado == EstadoSala.DisponivelMaisTarde){
+                    return s1.numMinutosAteEstarLivre > s2.numMinutosAteEstarLivre ? 1 : -1;}
                 return 0;
             }
         });
 
-        for(Sala sala : Salas.salasList) {
+        for(Sala sala : salas) {
             String stringDisponibilidade;
             if(sala.lidaComSucesso)
                 stringDisponibilidade = sala.obterDisponibilidadeString(hora, minuto);
@@ -92,9 +91,7 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
 
             stringsDisponibilidades.add(stringDisponibilidade);
             stringsIds.add(sala.id);
-
         }
-
 
         //Avisa o adapter que a lista de salas mudou
         notifyDataSetChanged();

@@ -43,15 +43,15 @@ public class Salas
 		salas = new HashMap<>();
 		salasList = new ArrayList<>();
 
-        addSala(new Sala("2448131361736", "V1.06", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330853"));
-        addSala(new Sala("2448131361735", "V1.07", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330860"));
-        addSala(new Sala("2448131361734", "V1.08", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/1415397882462609"));
-        addSala(new Sala("2448131361733", "V1.09", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/1415397882462614"));
+        addSala(new Sala("2448131361736", "V1.06"));
+        addSala(new Sala("2448131361735", "V1.07"));
+        addSala(new Sala("2448131361734", "V1.08"));
+        addSala(new Sala("2448131361733", "V1.09"));
 
-        addSala(new Sala("2448131361682", "V1.26", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330968"));
-        addSala(new Sala("2448131361681", "V1.25", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330966"));
-        addSala(new Sala("2448131361680", "V1.24", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330962"));
-        addSala(new Sala("2448131361679", "V1.23", "https://fenix.tecnico.ulisboa.pt/spaces-view/photo/570972952330955"));
+        addSala(new Sala("2448131361682", "V1.26"));
+        addSala(new Sala("2448131361681", "V1.25"));
+        addSala(new Sala("2448131361680", "V1.24"));
+        addSala(new Sala("2448131361679", "V1.23"));
 
         addSala(new Sala("2448131361683", "V1.31" ));
         addSala(new Sala("2448131361685", "V1.32"));
@@ -261,32 +261,4 @@ public class Salas
 
 		return new int[] { Integer.parseInt(h), Integer.parseInt(m) };
 	}
-
-    //Faz um request e obtem os dados sobre a sala, dado o id dela(salaId) e uma string com o dia a que se refere(day)
-	/*private static JSONObject getSala(String salaId, String day, RequestQueue volleyQueue) throws Exception {
-		String url = "https://fenix.tecnico.ulisboa.pt/api/fenix/v1/spaces/" + salaId + "?day=" + day;
-
-
-		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-		con.setRequestMethod("GET");
-
-		//Verifica se o servidor respondeu OK
-		int responseCode = con.getResponseCode();
-		if(responseCode != 200) {
-			throw new Exception("Error! response code: " + responseCode);
-		}
-
-		//Lê a resposta para uma string
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
-		}
-		in.close();
-
-		//Devolve essa string
-		return new JSONObject(response.toString());
-   }*/
 }
