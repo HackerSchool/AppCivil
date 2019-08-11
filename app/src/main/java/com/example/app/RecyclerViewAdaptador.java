@@ -1,16 +1,13 @@
 package com.example.app;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
@@ -19,11 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
-import android.widget.Toast;
 import android.widget.Button;
-import android.graphics.drawable.Drawable.ConstantState;
-import android.os.Build;
-import android.content.res.Resources;
 
 
 public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdaptador.ViewHolder>{
@@ -33,6 +26,7 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
 
     private List<Sala> salas; //Lista de salas a mostrar
     private List<String> stringsDisponibilidades; //Texto a apresentar com as disponibilidades
+    private List<String> stringsIds;
 
     ClickSalaCallback clickSalaCallback;
 
@@ -41,6 +35,7 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
         this.mContext = Context;
         salas = new ArrayList<>();
         stringsDisponibilidades = new ArrayList<>();
+        stringsIds = new ArrayList<>();
     }
 
     public void updateSalasToShow(final int hora, final int minuto) {
@@ -51,8 +46,19 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
         Collections.sort(salas, new Comparator<Sala>() {
             @Override
             public int compare(Sala s1, Sala s2) {
-                if(s1.favorita)
+                SharedPreferences sharedPreferences = mContext.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
+                String value1 = sharedPreferences.getString(s1.id, "nfav");
+                String value2 = sharedPreferences.getString(s1.id, "nfav");
+                Log.i("hi", value1+" "+value2);
+
+                if(value1.equals("fav"))
+                    return -1;
+
+                if(value2.equals("fav"))
                     return 1;
+
+                if(value2.equals(value1))
+                     return 0;
 
                 if(s1.numMinutosLivre < 15 && s2.numMinutosLivre < 15)
                     return 0;
@@ -85,6 +91,8 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
                 stringDisponibilidade = "Erro a obter dados";
 
             stringsDisponibilidades.add(stringDisponibilidade);
+            stringsIds.add(sala.id);
+
         }
 
 
@@ -111,10 +119,7 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
                 .load(sala.urlFoto) //Dar load ao url
                 .into(holder.image); //Dar load no holder
 
-
-        Glide.with(mContext)
-                .load(R.drawable.botao_estados)
-                .into(holder.heart);
+        DefinirImagem (holder, mContext, stringsIds.get(position));
 
         holder.imageName.setText(sala.nome);//Definir o Nome que aparece ao lado da imagem
 
@@ -124,17 +129,11 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
             @Override
             public void onClick(View v) { //Definir o que acontece quando se carrega no Holder
                 Log.d(TAG, "onClick: click on: " + sala.nome);
-                MudarImagem(v, mContext);
-                Toast.makeText(mContext, "Mostrar Horário da "+ sala.nome, Toast.LENGTH_SHORT).show();
+                MudarImagem(v, mContext, stringsIds.get(position));
             }
 
 
         });
-
-
-
-
-
     }
 
 
@@ -161,6 +160,7 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
         TextView hora;
         CircleImageView heart;
         Button botao;
+        String SHARED_PREFS;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -170,6 +170,7 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
             heart = itemView.findViewById(R.id.heart);
             parentLayout = itemView.findViewById(R.id.parent_layout);
             botao = itemView.findViewById(R.id.botao_link);
+            SHARED_PREFS = "sharedPrefs";
         }
     }
 
@@ -177,19 +178,52 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
         void onClick(Sala sala);
     }
 
-    public void MudarImagem(@NonNull View itemView, Context ctx){
+    private void DefinirImagem (@NonNull ViewHolder holder, Context ctx, String id){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
+        String value = sharedPreferences.getString(id, "nfav");
+        if (value.equals("fav"))
+        {
+            Glide.with(mContext)
+                    .load(R.drawable.ic_favorite_black_24dp)
+                    .into(holder.heart);
+        }
+        else
+        {
+            Glide.with(mContext)
+                    .load(R.drawable.ic_heart)
+                    .into(holder.heart);
+        }
+    }
+
+    private void MudarImagem(@NonNull View itemView, Context ctx, String id){
         CircleImageView imageView = itemView.findViewById(R.id.heart);
-        //if coracao prenchido -> tirar estado de favorito e pôr coracao não preenchido
-        //if coracao nao preenchido -> por estado favorito e pôr coracao preenchido
-        if (imageView.getDrawable().getConstantState() == ctx.getResources().getDrawable(R.drawable.ic_favorite_black_24dp).getConstantState())
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
+        String value = sharedPreferences.getString(id, "nfav");
+        if (value.equals("fav"))
         {
             imageView.setImageResource(R.drawable.ic_heart);
-            // sala.favorita = false;
+            SetDataUnFav(ctx, itemView, id);
         }
         else
         {
             imageView.setImageResource(R.drawable.ic_favorite_black_24dp);
-            // sala.favorita = true;
+            SetDataFav(ctx, itemView, id);
         }
+    }
+
+    private void SetDataFav(Context ctx, @NonNull View itemView, String id){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(id, "fav");
+        editor.apply();
+        String value = sharedPreferences.getString(id, "nfav");
+    }
+
+    private void SetDataUnFav(Context ctx, @NonNull View itemView, String id){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(id, "nfav");
+        editor.apply();
+        String value = sharedPreferences.getString(id, "nfav");
     }
 }

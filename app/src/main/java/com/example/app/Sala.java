@@ -1,9 +1,5 @@
 package com.example.app;
-import android.util.Pair;
-
 import java.util.ArrayList;
-import android.widget.ImageView;
-import android.graphics.Bitmap;
 
 public final class Sala {
     private static final String FOTO_DEFAULT = "http://www.civil.ist.utl.pt/~arq/images/salanormal1.jpg";
@@ -22,23 +18,20 @@ public final class Sala {
     EstadoSala estado;
     int numMinutosLivre;
     int numMinutosAteEstarLivre;
-    Boolean favorita;
 
 
-    public Sala(String id, String nome, boolean favorita) {
+    public Sala(String id, String nome) {
         this.id = id;
         this.nome = nome;
         urlFoto = FOTO_DEFAULT;
-        this.favorita = favorita;
 
         lidaComSucesso = true;
     }
 
-    public Sala(String id, String nome, String urlFoto, boolean favorita) {
+    public Sala(String id, String nome, String urlFoto) {
         this.id = id;
         this.nome = nome;
         this.urlFoto = urlFoto;
-        this.favorita = favorita;
     }
 
     /**
