@@ -6,18 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="15dp"
-    android:visibility="visible">
+    android:visibility="visible"
+    android:background="@drawable/border"
+    >
 
     <Button
         android:id="@+id/botao_link"
         android:layout_width="298dp"
         android:layout_height="80dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
         android:background="@android:color/transparent"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="87dp"
+        android:layout_height="87dp"
+        android:layout_marginTop="6dp"
         android:src="@mipmap/ic_launcher" />
 
 
@@ -27,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="31dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/image"
         android:text="@string/sala_v0_03"
         android:textColor="#000"
@@ -39,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="31dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="45dp"
         android:layout_toRightOf="@+id/image"
         android:text="@string/dispon_vel_por_mais_5h"
         android:textColor="#000"

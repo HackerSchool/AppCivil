@@ -112,14 +112,14 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
         if (sala.Foto.equals("fechada")) {
             Glide.with(mContext) //Glide é uma biblioteca
                     .asBitmap() //Diz ao glide q queremos como um bitmap
-                    .load(R.mipmap.sala_fechada) //Dar load ao url
+                    .load(R.mipmap.sala_fechada_round) //Dar load ao url
                     .into(holder.image); //Dar load no holder
         }
 
         else {
             Glide.with(mContext) //Glide é uma biblioteca
                     .asBitmap() //Diz ao glide q queremos como um bitmap
-                    .load(R.mipmap.sala_janela) //Dar load ao url
+                    .load(R.mipmap.sala_janela_round) //Dar load ao url
                     .into(holder.image); //Dar load no holder
         }
 
@@ -131,13 +131,22 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
 
         holder.heart.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { //Definir o que acontece quando se carrega no Holder
-                Log.d(TAG, "onClick: click on: " + sala.nome);
+            public void onClick(View v) { //Definir o que acontece quando se carrega no botao favorito
                 MudarImagem(v, mContext, stringsIds.get(position));
             }
 
 
         });
+
+        holder.botao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { //Definir o que acontece quando se carrega no Holder
+                clickSalaCallback.onClick(sala);
+            }
+
+
+        });
+
     }
 
 
