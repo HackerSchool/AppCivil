@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
-            android:label="Salas de Civil"
+            android:label="Salas Civil"
             android:icon="@mipmap/icon_hs">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,7 +1,6 @@
 package com.example.app;
 import android.util.Log;
 
-import com.android.volley.toolbox.Volley;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -43,20 +42,20 @@ public class Salas
 		salas = new HashMap<>();
 		salasList = new ArrayList<>();
 
-        addSala(new Sala("2448131361736", "V1.06"));
-        addSala(new Sala("2448131361735", "V1.07"));
-        addSala(new Sala("2448131361734", "V1.08"));
-        addSala(new Sala("2448131361733", "V1.09"));
+        addSala(new Sala("2448131361736", "V1.06","fechada"));
+        addSala(new Sala("2448131361735", "V1.07","fechada"));
+        addSala(new Sala("2448131361734", "V1.08","fechada"));
+        addSala(new Sala("2448131361733", "V1.09","fechada"));
 
-        addSala(new Sala("2448131361682", "V1.26"));
-        addSala(new Sala("2448131361681", "V1.25"));
-        addSala(new Sala("2448131361680", "V1.24"));
-        addSala(new Sala("2448131361679", "V1.23"));
+        addSala(new Sala("2448131361682", "V1.26","janelas"));
+        addSala(new Sala("2448131361681", "V1.25","janelas"));
+        addSala(new Sala("2448131361680", "V1.24","janelas"));
+        addSala(new Sala("2448131361679", "V1.23","janelas"));
 
-        addSala(new Sala("2448131361683", "V1.31" ));
-        addSala(new Sala("2448131361685", "V1.32"));
-        addSala(new Sala("2448131361687", "V1.33"));
-        addSala(new Sala("2448131361689", "V1.34"));
+        addSala(new Sala("2448131361683", "V1.31","fechada"));
+        addSala(new Sala("2448131361685", "V1.32","fechada"));
+        addSala(new Sala("2448131361687", "V1.33","fechada"));
+        addSala(new Sala("2448131361689", "V1.34","fechada"));
 	}
 
 	/**

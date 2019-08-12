@@ -2,9 +2,9 @@ package com.example.app;
 import java.util.ArrayList;
 
 public final class Sala {
-    private static final String FOTO_DEFAULT = "http://www.civil.ist.utl.pt/~arq/images/salanormal1.jpg";
+    private static final String FOTO_DEFAULT = "fechada";
     String id, nome;
-    String urlFoto;
+    String Foto;
     ArrayList<SalaEvento> eventos;
 
     //Comtem intervalos enquanto vai estar livre
@@ -23,15 +23,17 @@ public final class Sala {
     public Sala(String id, String nome) {
         this.id = id;
         this.nome = nome;
-        urlFoto = FOTO_DEFAULT;
+        Foto = FOTO_DEFAULT;
 
         lidaComSucesso = true;
     }
 
-    public Sala(String id, String nome, String urlFoto) {
+    public Sala(String id, String nome, String Foto) {
         this.id = id;
         this.nome = nome;
-        this.urlFoto = urlFoto;
+        this.Foto = Foto;
+
+        lidaComSucesso = true;
     }
 
     /**

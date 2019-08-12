@@ -17,8 +17,6 @@ import java.util.Comparator;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import android.widget.Button;
-import  java.io.File;
-import  android.net.Uri;
 
 
 public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdaptador.ViewHolder>{
@@ -111,10 +109,19 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
 
         final Sala sala = salas.get(position);
 
-        Glide.with(mContext) //Glide é uma biblioteca
-                .asBitmap() //Diz ao glide q queremos como um bitmap
-                .load(sala.urlFoto) //Dar load ao url
-                .into(holder.image); //Dar load no holder
+        if (sala.Foto.equals("fechada")) {
+            Glide.with(mContext) //Glide é uma biblioteca
+                    .asBitmap() //Diz ao glide q queremos como um bitmap
+                    .load(R.mipmap.sala_fechada) //Dar load ao url
+                    .into(holder.image); //Dar load no holder
+        }
+
+        else {
+            Glide.with(mContext) //Glide é uma biblioteca
+                    .asBitmap() //Diz ao glide q queremos como um bitmap
+                    .load(R.mipmap.sala_janela) //Dar load ao url
+                    .into(holder.image); //Dar load no holder
+        }
 
         DefinirImagem (holder, mContext, stringsIds.get(position));
 
